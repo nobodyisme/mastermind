@@ -330,12 +330,12 @@ class NodeBackendStat(object):
 
         self.commands_stat = CommandsStat()
 
-        self.last_read, self.last_write = 0, 0
-        self.read_rps, self.write_rps = 0, 0
+        self.last_read, self.last_write = 0, 0  # not used anymore?
+        self.read_rps, self.write_rps = 0, 0  # not used anymore?
 
         # Tupical SATA HDD performance is 100 IOPS
         # It will be used as first estimation for maximum node performance
-        self.max_read_rps, self.max_write_rps = 100, 100
+        self.max_read_rps, self.max_write_rps = 100, 100  # not used anymore?
 
         self.fragmentation = 0.0
         self.files = 0
@@ -598,11 +598,9 @@ class Node(object):
         self.family = int(family)
         self.host.nodes.append(self)
 
-        self.stat = None
+        self.stat = NodeStat()
 
     def update_statistics(self, new_stat, collect_ts):
-        if self.stat is None:
-            self.stat = NodeStat()
         self.stat.update(new_stat, collect_ts)
 
     def __repr__(self):
@@ -736,7 +734,7 @@ class Fs(object):
 
         self.node_backends = {}
 
-        self.stat = None
+        self.stat = FsStat()
 
     def add_node_backend(self, nb):
         if nb.fs:
@@ -748,8 +746,6 @@ class Fs(object):
         del self.node_backends[nb]
 
     def update_statistics(self, new_stat, collect_ts):
-        if self.stat is None:
-            self.stat = FsStat()
         self.stat.update(new_stat, collect_ts)
 
     def update_commands_stats(self):
@@ -809,7 +805,7 @@ class NodeBackend(object):
         self.fs = None
         self.group = None
 
-        self.stat = None
+        self.stat = NodeBackendStat(self.node.stat)
 
         self.read_only = False
         self.disabled = False
@@ -840,8 +836,6 @@ class NodeBackend(object):
         self.read_only = False
 
     def update_statistics(self, new_stat, collect_ts):
-        if self.stat is None:
-            self.stat = NodeBackendStat(self.node.stat)
         self.base_path = os.path.dirname(new_stat['backend']['config'].get('data') or
                                          new_stat['backend']['config'].get('file')) + '/'
         self.stat.update(new_stat, collect_ts)
@@ -966,7 +960,12 @@ class NodeBackend(object):
                     self.status, str(self.read_only), repr(self.stat)))
 
     def __str__(self):
-        return '%s:%d/%d' % (self.node.host.addr, self.node.port, self.backend_id)
+        return '{ip}:{port}:{family}/{backend_id}'.format(
+            ip=self.node.host.addr,
+            port=self.node.port,
+            family=self.node.family,
+            backend_id=self.backend_id,
+        )
 
     def __hash__(self):
         return hash(self.__str__())
