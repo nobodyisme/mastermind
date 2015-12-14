@@ -195,8 +195,8 @@ class NodeInfoUpdater(object):
 
             try:
                 node = storage.nodes[node_addr]
-            except KeyError:
-                logger.exception()
+            except KeyError as e:
+                logger.exception(e)
                 continue
 
             try:
