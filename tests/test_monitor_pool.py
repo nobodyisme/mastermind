@@ -2,7 +2,7 @@ import socket
 
 import msgpack
 
-from fixtures.util import parametrize
+from utils import parametrize
 
 
 @parametrize('family', (socket.AF_INET, socket.AF_INET6))

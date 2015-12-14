@@ -4,7 +4,7 @@ import time
 import pytest
 
 from mastermind import pool
-from fixtures.util import parametrize
+from utils import parametrize
 
 
 class TimingWrapper(object):
