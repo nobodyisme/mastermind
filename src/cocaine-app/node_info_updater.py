@@ -184,9 +184,10 @@ class NodeInfoUpdater(object):
                 continue
 
             try:
-                node_addr = '{host}:{port}'.format(
+                node_addr = '{host}:{port}:{family}'.format(
                     host=result['host'],
                     port=result['port'],
+                    family=result['family'],
                 )
             except KeyError:
                 logger.error('Malformed monitor stat result: host and port are required')
@@ -236,9 +237,10 @@ class NodeInfoUpdater(object):
             logger.info('Unique routes calculated')
 
         for ha in host_addrs:
-            node_addr = '{host}:{port}'.format(
+            node_addr = '{host}:{port}:{family}'.format(
                 host=ha.host,
                 port=ha.port,
+                family=ha.family,
             )
             if ha.host not in storage.hosts:
                 logger.debug('Adding host {}'.format(ha.host))
