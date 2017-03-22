@@ -35,8 +35,6 @@ logger = logging.getLogger('mm.balancer')
 
 logger.info('balancer.py')
 
-CONFIG_REMOTES = config.get('elliptics', {}).get('nodes', [])
-
 
 class Balancer(object):
     # TODO: remove cycle dependency for Statistics and Balancer object,
@@ -1209,11 +1207,6 @@ class Balancer(object):
             raise Exception('Incorrect groups count')
 
         return self.infrastructure.reserve_group_ids(groups_count)
-
-    # @h.concurrent_handler
-    @h.handler_wne
-    def get_config_remotes(self, request):
-        return CONFIG_REMOTES
 
     ALPHANUM = 'a-zA-Z0-9'
     EXTRA = '\-_'
