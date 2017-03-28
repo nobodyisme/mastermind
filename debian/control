@@ -32,6 +32,7 @@ Depends:
  cocaine-v12-runtime,
  python-mastermind (= ${binary:Version}),
  elliptics-client,
+ yandex-mds-python-flatbuffers,
 Conflicts:
  mastermind-cocainev11
 Recommends:
