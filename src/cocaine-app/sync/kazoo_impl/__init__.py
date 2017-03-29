@@ -101,7 +101,7 @@ class ZkSyncManager(object):
     def persistent_locks_acquire(self, locks, data='', ephemeral=False):
         try:
             retry = self._retry.copy()
-            result = retry(self._inner_persistent_locks_acquire, locks=locks, data=data, ephemeral=True)
+            result = retry(self._inner_persistent_locks_acquire, locks=locks, data=data, ephemeral=ephemeral)
         except RetryFailedError:
             raise LockError('Failed to acquire persistent locks {} after several retries'.format(
                 locks))
